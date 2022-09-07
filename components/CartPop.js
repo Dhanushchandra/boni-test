@@ -2,8 +2,12 @@ import React from "react";
 import { View, Text, Image, TouchableOpacity, Dimensions } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
 
 function CartPop() {
+  const cart = useSelector((state) => state.cartItems);
+  const cartLength = cart.length;
+
   const windowHeight = Dimensions.get("window").height;
   const navigation = useNavigation();
   return (
@@ -13,7 +17,7 @@ function CartPop() {
         position: "absolute",
         width: "100%",
         height: 60,
-        top: windowHeight - 60,
+        // top: windowHeight - 60,
       }}
     >
       <View
@@ -34,7 +38,7 @@ function CartPop() {
             fontWeight: "bold",
           }}
         >
-          300 | 2 items
+          {cartLength} items
         </Text>
         <TouchableOpacity onPress={() => navigation.navigate("Cart")}>
           <View

@@ -1,11 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useNavigation } from "@react-navigation/native";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  addItem,
+  removeItem,
+  addItemToCart,
+  removeItemToCart,
+  addItemprice,
+  removeItemprice,
+} from "../../redux/action";
 
-const Items = () => {
+import cartItems from "../../redux/reducer/cartItems";
+
+const Items = ({ name, price, qua }) => {
+  // const quantity = useSelector((state) => state.cartQuantity);
+  const cartItems = useSelector((state) => state.cartItems);
+
   const [quantity, setQuantity] = useState(1);
+  const [initPrice, setInitPrice] = useState(price);
+
+  useEffect(() => {
+    const newPrice = price * quantity;
+    setInitPrice(newPrice);
+    dispatch(addItemprice(newPrice));
+  }, [quantity]);
+
+  const dispatch = useDispatch();
+
   return (
     <View
       style={{
@@ -20,7 +44,7 @@ const Items = () => {
             fontSize: 20,
           }}
         >
-          Carrot
+          {name}
         </Text>
       </View>
 
@@ -36,9 +60,18 @@ const Items = () => {
             borderRadius: 5,
           }}
           onPress={() => {
-            if (quantity > 1) {
-              setQuantity(quantity - 1);
-            }
+            // dispatch(addItem());
+            cartItems.find((item) => {
+              if (item.name === name) {
+                setQuantity(quantity - 1);
+
+                dispatch(removeItemprice(price));
+
+                if (quantity == 0) {
+                  dispatch(removeItemToCart(name));
+                }
+              }
+            });
           }}
         >
           <AntDesign
@@ -73,7 +106,13 @@ const Items = () => {
             borderRadius: 5,
           }}
           onPress={() => {
-            setQuantity(quantity + 1);
+            cartItems.find((item) => {
+              if (item.name === name) {
+                setQuantity(quantity + 1);
+                setInitPrice(price * quantity);
+                dispatch(addItemprice(item.price * quantity));
+              }
+            });
           }}
         >
           <AntDesign
@@ -96,7 +135,7 @@ const Items = () => {
             color: "grey",
           }}
         >
-          Rs.4000
+          Rs. {initPrice}
         </Text>
       </View>
     </View>
@@ -104,6 +143,7 @@ const Items = () => {
 };
 
 function CartHead() {
+  const cartItems = useSelector((state) => state.cartItems);
   const navigation = useNavigation();
   return (
     <View>
@@ -141,11 +181,16 @@ function CartHead() {
       >
         Cart items
       </Text>
-      <Items />
-      <Items />
-      <Items />
-      <Items />
-      <Items />
+      {cartItems.map((item) => {
+        return (
+          <Items
+            name={item.name}
+            price={item.price}
+            qua={item.quantity}
+            key={item.id}
+          />
+        );
+      })}
       <View
         style={{
           marginLeft: 20,

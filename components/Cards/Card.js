@@ -1,7 +1,12 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
+import { addItemToCart } from "../../redux/action";
 
-function Card({ img, name, price, sprice }) {
+function Card({ img, name, price, sprice, id }) {
+  const cart = useSelector((state) => state.cartItems);
+  const dispatch = useDispatch();
+
   return (
     <View
       style={{
@@ -36,7 +41,7 @@ function Card({ img, name, price, sprice }) {
             marginLeft: 30,
           }}
         >
-          {price}
+          Rs. {price}
         </Text>
         <Text
           style={{
@@ -45,9 +50,16 @@ function Card({ img, name, price, sprice }) {
             marginLeft: 30,
           }}
         >
-          {sprice}
+          Rs. {sprice}
         </Text>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            alert("Added to cart");
+            dispatch(
+              addItemToCart({ img, name, price, sprice, id, quantity: 1 })
+            );
+          }}
+        >
           <Text
             style={{
               backgroundColor: "#FF5B5B",

@@ -2,8 +2,12 @@ import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { useSelector, useDispatch } from "react-redux";
 
 function CartHero() {
+  const itemPrice = useSelector((state) => state.itemPrice);
+  const subtotal = itemPrice[itemPrice.length - 1];
+  const dispatch = useDispatch();
   return (
     <View>
       <View
@@ -112,7 +116,7 @@ function CartHero() {
               marginRight: 20,
             }}
           >
-            Rs. 4840
+            Rs. {subtotal > 0 ? subtotal : 0}
           </Text>
         </View>
         <View
@@ -166,7 +170,7 @@ function CartHero() {
               marginRight: 20,
             }}
           >
-            Rs. 5030
+            Rs. {subtotal + 150}
           </Text>
         </View>
       </View>
