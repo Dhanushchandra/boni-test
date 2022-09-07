@@ -1,9 +1,11 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity, Dimensions } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { useNavigation } from "@react-navigation/native";
 
 function CartPop() {
   const windowHeight = Dimensions.get("window").height;
+  const navigation = useNavigation();
   return (
     <View
       style={{
@@ -34,7 +36,7 @@ function CartPop() {
         >
           300 | 2 items
         </Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("Cart")}>
           <View
             style={{
               display: "flex",

@@ -1,5 +1,6 @@
 import { SafeAreaView, ScrollView, StatusBar } from "react-native";
 import Home from "./Screens/Home";
+import AppNavigator from "./App.Navigator";
 
 export default function App() {
   console.log(StatusBar.currentHeight);
@@ -10,7 +11,7 @@ export default function App() {
         marginTop: StatusBar.currentHeight,
       }}
     >
-      <Home />
+      <AppNavigator />
     </SafeAreaView>
   );
 }
